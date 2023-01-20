@@ -1,4 +1,5 @@
 const UserModel = require("../models/User");
+const SupplierModel = require("../models/Supplier");
 
 class Auth {
   static async list(_, res) {
@@ -14,6 +15,19 @@ class Auth {
     try {
       const { username, password } = req.body;
       const user = await UserModel.findOne({ username });
+      if (user === {} || !user) throw new Error("User Not Found");
+
+      if (user.password !== password) throw new Error("Wrong password");
+
+      return res.json(user);
+    } catch (error) {
+      return res.status(400).send(error.message);
+    }
+  }
+  static async loginSupplier(req, res) {
+    try {
+      const { username, password } = req.body;
+      const user = await SupplierModel.findOne({ username });
       if (user === {} || !user) throw new Error("User Not Found");
 
       if (user.password !== password) throw new Error("Wrong password");

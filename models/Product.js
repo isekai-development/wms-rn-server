@@ -13,6 +13,9 @@ const Product = new Schema(
       type: Number,
       required: true,
     },
+    minimumQuantity: {
+      type: Number,
+    },
     unit: {
       type: String,
       required: true,

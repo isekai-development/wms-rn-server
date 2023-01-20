@@ -5,6 +5,7 @@ const Product = require("../controllers/Products");
 
 router
   .get("/list", Product.list)
+  .get("/listBySupplierId", Product.listBySupplierId)
   .post("/createMany", Product.createMany)
   .post("/create", Product.create)
   .put("/update", Product.update)

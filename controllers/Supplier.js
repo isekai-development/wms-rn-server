@@ -4,7 +4,7 @@ const ObjectId = require("mongoose").Types.ObjectId;
 class Supplier {
   static async list(_, res) {
     try {
-      const docs = await SupplierModel.find({});
+      const docs = await SupplierModel.find({}).sort({ createdAt: -1 });
       return res.json(docs);
     } catch (error) {
       return res.json(error.message);

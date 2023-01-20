@@ -4,7 +4,21 @@ const ObjectId = require("mongoose").Types.ObjectId;
 class Product {
   static async list(_, res) {
     try {
-      const docs = await ProductModel.find({}).populate("supplier");
+      const docs = await ProductModel.find({})
+        .populate("supplier")
+        .sort({ quantity: 1 });
+
+      return res.json(docs);
+    } catch (error) {
+      return res.json(error.message);
+    }
+  }
+  static async listBySupplierId(_, res) {
+    try {
+      const { supplierId } = req.query;
+      const docs = await ProductModel.find({
+        suplier: new ObjectId(supplierId),
+      }).sort({ quantity: 1 });
 
       return res.json(docs);
     } catch (error) {
@@ -22,7 +36,7 @@ class Product {
   }
   static async create(req, res) {
     try {
-      const { name, quantity, unit, supplierId } = req.body;
+      const { name, quantity, unit, supplierId, minimumQuantity } = req.body;
       const product = await ProductModel.findOne({ name });
       if (product) throw new Error("Product already been registered");
 
@@ -31,6 +45,7 @@ class Product {
         quantity,
         unit,
         supplier: supplierId,
+        minimumQuantity,
       });
 
       const docs = await newProduct.save();
